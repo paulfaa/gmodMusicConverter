@@ -1,6 +1,8 @@
 import os
 import re
 import logging
+import mutagen
+from mutagen.mp3 import EasyMP3 as MP3
 import tkinter as tk
 from tkinter import filedialog, Text
 
@@ -43,16 +45,25 @@ def generateTxt():
 	print(folderPath)
 	for file in os.scandir(folderPath): 
 		if file.name.endswith('.mp3'):
-			#artist = id3.artist
+			id3 = MP3(file)
+			if "title" in id3:
+				title = id3["title"][0]
+			else:
+				title = "?"
+			if "artist" in id3:
+				artist = id3["artist"][0]
+			else:
+				artist = "?"
+			print(artist + " " + title)
 			txtFileName = re.sub('.mp3$', '.txt', file.name)
-			print(txtFileName)
 			if not os.path.exists(txtFileName):
-				#files are being output to same directory as script and not selected folder
-				with open(txtFileName, 'w') as outputFile:
-					outputFile.write("helloo")
+				outputPath = os.path.join(folderPath + "/" + txtFileName)
+				with open(outputPath, 'w') as outputFile:
+					outputFile.write(artist + "\n" + title)
 					outputFile.close()
 					print("Created file")
 					countFiles = countFiles + 1
+	print("Script complete, created " + str(countFiles) + " files.")
 	
 def convert():
 	folderPath = ""
