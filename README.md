@@ -18,4 +18,5 @@ Convert function:
 Generate function:
 
   Select a folder to generate .txt files for use with the plugin
+  
   Data is pulled from the ID3 tags for each .mp3 file, these will display as '?' if no data is available
